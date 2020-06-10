@@ -1,0 +1,12 @@
+accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+accept-encoding:gzip,deflate,br
+accept-language:zh-CN,zh;q=0.9,ja;q=0.8,zh-TW;q=0.7,en;q=0.6
+cache-control:no-cache
+cookie: session-id=355-7386136-1989064; i18n-prefs=JPY; csm-hit=tb:s-XFDXC3TTYY7WB7H76152|1588686299169&t:1588686299619&adb:adblk_no; ubid-acbjp=355-3611257-1252143; session-id-time=2082726001l; x-wl-uid=1ZJFmZ3LNouV7R5WrvXcscdYd1275nLuNV7Qew5jcjVYSJE9Pq468sbeIS5sZvhJNcl4KIn9iK2s=; session-token=Ao7flvty9J3ZRFaO2fi3db+1sA2fWbKq1q3iifYWvnXGrSgmIT5mBAGgP/pxqTIiWnhs6nGtsdaIDl4chpkNpyxAKogj8R9ilsckcygNFXy+NBfHyjqhkfmLfGZLaeVkP3yLVy+kU1rx3vjs3/6JasTGZBtWhlsH4x4k2f7e23vHHyhYi+le/yEMql8uzv7dpuqIb8Gfpn/0mI7YWsXAXv9SUF9QzPKOJ7GijYsKsLXKqn363Msfx/Mcsv0bcEus
+pragma:no-cache
+sec-fetch-dest:document
+sec-fetch-mode:navigate
+sec-fetch-site:none
+sec-fetch-user:?1
+upgrade-insecure-requests:1
+user-agent:Mozilla/5.0(WindowsNT10.0;Win64;x64)AppleWebKit/537.36(KHTML,likeGecko)Chrome/81.0.4044.129Safari/537.36
