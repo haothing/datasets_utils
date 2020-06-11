@@ -83,7 +83,7 @@ def image_generator():
             num_text = num_text_list[index]
             if num_text <= 0:
                 continue
-            size = np.random.randint(32, 60, size=num_text)
+            size = np.random.randint(24, 50, size=num_text)
 
             # 减少文本超越图片大小的概率，缩小取得位置的起始点
             pos_x = np.random.randint(bk_np.shape[1] * 0.7, size=num_text)
