@@ -17,6 +17,7 @@ parser.add_argument('--background_folder', '-b', default='./bg_images', type=str
 parser.add_argument('--result_num', '-n', default=100, type=int, help='number of result images every background image, as total when no background images.')
 parser.add_argument('--output_images_folder', '-o', default='./', type=str, help='output images folder')
 parser.add_argument('--output_ground_true_folder', '-ogt', default='./', type=str, help='output ground true folder')
+parser.add_argument('--fonts_folder', '-f', default='./fonts/jp', type=str, help='folder of fonts that to draw text')
 parser.add_argument('--mat_ground_true', '-mat', default=False, action='store_true', help='output mat ground true')
 parser.add_argument('--one_line', '-l', default=False, action='store_true', help='generate one line text images')
 
@@ -164,7 +165,7 @@ def one_line_images():
     output_path = args.output_images_folder
     images_folder = os.path.split(output_path)[1]
     total = args.result_num
-    fonts_path = 'F:/repositories/workspaces/datasets_utils/fonts/jp_simple'
+    fonts_path = args.fonts_folder
     
     font_list, gt_text = [], []
     for file_name in os.listdir(fonts_path):
