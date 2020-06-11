@@ -149,7 +149,7 @@ def image_generator():
 
 def get_text(char_num):
     
-    char_file = open('./japanese_kana.txt', "r", encoding="utf-8")
+    char_file = open('./japanese_char.txt', "r", encoding="utf-8")
     #char_file = open('./char_test.txt', "r", encoding="utf-8")
     all_text = ''.join(char_file.read().splitlines())
     text = ''.join([all_text[np.random.randint(len(all_text))] for i in range(char_num)])
@@ -196,6 +196,8 @@ def one_line_images():
     gt_file = open(os.path.join(args.output_ground_true_folder, "ground_true.txt"), "w", encoding="utf-8")
     gt_file.write("\n".join(gt_text))
     gt_file.close()
+
+    print('')
 
 def save_mat_gt(imnames, wordBB, charBB, txt):
 
