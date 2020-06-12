@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(description='Text Label Image Generator')
 parser.add_argument('--background_folder', '-b', default='./bg_images', type=str, help='images folder as background')
 parser.add_argument('--result_num', '-n', default=100, type=int, help='number of result images every background image, as total when no background images.')
 parser.add_argument('--output_images_folder', '-o', default='./', type=str, help='output images folder')
-parser.add_argument('--output_ground_true_folder', '-ogt', default='./', type=str, help='output ground true folder')
+parser.add_argument('--output_ground_true', '-ogt', default='./', type=str, help='output ground true folder')
 parser.add_argument('--fonts_folder', '-f', default='./fonts/jp', type=str, help='folder of fonts that to draw text')
 parser.add_argument('--mat_ground_true', '-mat', default=False, action='store_true', help='output mat ground true')
 parser.add_argument('--one_line', '-l', default=False, action='store_true', help='generate one line text images')
@@ -160,7 +160,7 @@ def one_line_images():
 
     # return list object with image file name and text 
     os.makedirs(args.output_images_folder, exist_ok=True)
-    os.makedirs(args.output_ground_true_folder, exist_ok=True)
+    os.makedirs(os.path.dirname(args.output_ground_true), exist_ok=True)
 
     output_path = args.output_images_folder
     images_folder = os.path.split(output_path)[1]
@@ -193,7 +193,7 @@ def one_line_images():
 
         print('\rgenerated files {:d}/{:d}'.format(index + 1, total), end='')
 
-    gt_file = open(os.path.join(args.output_ground_true_folder, "ground_true.txt"), "w", encoding="utf-8")
+    gt_file = open(args.output_ground_true, "w", encoding="utf-8")
     gt_file.write("\n".join(gt_text))
     gt_file.close()
 
@@ -208,7 +208,7 @@ def save_mat_gt(imnames, wordBB, charBB, txt):
     for i in range(len(charBB)):
         charBB[i] = charBB[i].T
 
-    scipy.io.savemat(os.path.join(args.output_ground_true_folder, 'ground_true.mat'), 
+    scipy.io.savemat(args.output_ground_true, 
         {'imnames': np.array([imnames]), 'wordBB': np.array([wordBB]), 'charBB': np.array([charBB]), 'txt': np.array([txt])})
 
 def save_simple_gt(imnames, txt):
@@ -216,7 +216,7 @@ def save_simple_gt(imnames, txt):
     # 20456343_4045240981.jpg your text
     # 20457281_3395886438.jpg second line
 
-    f = open(os.path.join(args.output_ground_true_folder, "ground_true.txt"), "w", encoding="utf-8")
+    f = open(args.output_ground_true, "w", encoding="utf-8")
     gt_text = []
     for i, file_name in enumerate(imnames):
         gt_text.append(file_name[0] + ' ' + ','.join(txt[i]))
