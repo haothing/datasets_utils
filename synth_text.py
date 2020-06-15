@@ -11,18 +11,21 @@ import scipy.io
 # synth_text.py -n 200 -b "E:/datasets/SynthText/bg_images" -o "E:/datasets/SynthText/SynthText_Gen/SynthText_self" -ogt "E:/datasets/SynthText/SynthText_Gen" -mat 
 # synth_text.py -n 10 -o "E:/datasets/SynthText/test/images" -b "E:/datasets/SynthText/bg_images_1" -ogt "E:/datasets/SynthText/test/" -mat
 # synth_text.py -n 10 -o "E:/datasets/SynthText/test/images" -ogt "E:/datasets/SynthText/test/" -l
+# synth_text.py -n 1000 -cn 12 -c ./characters/japanese_kana.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
 
 parser = argparse.ArgumentParser(description='Text Label Image Generator')
 parser.add_argument('--background_folder', '-b', default='./bg_images', type=str, help='images folder as background')
 parser.add_argument('--result_num', '-n', default=100, type=int, help='number of result images every background image, as total when no background images.')
+parser.add_argument('--characters_num', '-cn', default=5, type=int, help='number of characters in image.')
 parser.add_argument('--output_images_folder', '-o', default='./', type=str, help='output images folder')
-parser.add_argument('--output_ground_true', '-ogt', default='./', type=str, help='output ground true folder')
-parser.add_argument('--fonts_folder', '-f', default='./fonts/jp', type=str, help='folder of fonts that to draw text')
+parser.add_argument('--output_ground_true', '-ogt', default='./', type=str, help='output ground true file')
 parser.add_argument('--mat_ground_true', '-mat', default=False, action='store_true', help='output mat ground true')
 parser.add_argument('--one_line', '-l', default=False, action='store_true', help='generate one line text images')
+parser.add_argument('--fonts_folder', '-f', default='./fonts/jp', type=str, help='folder of fonts that to draw text')
+parser.add_argument('--characters_file', '-c', default='./characters/japanese_char.txt', type=str, help='origin characters to make image files')
 
 parser.add_argument('--height', default=32, type=int, help='number of result images height')
-parser.add_argument('--width', default=160, type=int, help='number of result images width')
+parser.add_argument('--width', default=280, type=int, help='number of result images width')
 # parser.add_argument('--link_threshold', default=0.4, type=float, help='link confidence threshold')
 # parser.add_argument('--cuda', default=True, type=str2bool, help='Use cuda for inference')
 # parser.add_argument('--canvas_size', default=1280, type=int, help='image size for inference')
@@ -149,7 +152,9 @@ def image_generator():
 
 def get_text(char_num):
     
-    char_file = open('./japanese_char.txt', "r", encoding="utf-8")
+    args.characters_file
+
+    char_file = open(args.characters_file, "r", encoding="utf-8")
     #char_file = open('./char_test.txt', "r", encoding="utf-8")
     all_text = ''.join(char_file.read().splitlines())
     text = ''.join([all_text[np.random.randint(len(all_text))] for i in range(char_num)])
@@ -171,9 +176,7 @@ def one_line_images():
     for file_name in os.listdir(fonts_path):
         font_list.append(os.path.join(fonts_path, file_name))
 
-    char_num = args.width // args.height
     for index in range(total):
-        
         bg_color = np.random.randint(0, 255)
         text_color = bg_color + 127 - 255 if bg_color + 127 > 255 else bg_color + 127
         
@@ -181,10 +184,13 @@ def one_line_images():
         img = Image.fromarray(img, mode='L')
 
         fnt_path = font_list[np.random.randint(0, len(font_list))]
-        fnt = ImageFont.truetype(fnt_path, args.height)
-        text = get_text(char_num)
+        fnt = ImageFont.truetype(fnt_path, int(args.height * (np.random.randint(6, 10) / 10)))
+        text = get_text(args.characters_num)
 
         draw = ImageDraw.Draw(img)
+        draw_w = draw.textsize(text, font=fnt)[0]
+        if draw_w > args.width:
+            text = text[:int(args.width / draw_w * len(text))]
         draw.text((0, 0), text, font=fnt, fill=text_color)
 
         img_path = os.path.join(output_path, str(index) + '.jpg')
