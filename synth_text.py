@@ -9,7 +9,7 @@ import scipy.io
 
 # command sample
 # synth_text.py -n 200 -b "E:/datasets/SynthText/bg_images" -o "E:/datasets/SynthText/SynthText_Gen/SynthText_self" -ogt "E:/datasets/SynthText/SynthText_Gen" -mat 
-# synth_text.py -n 10 -o "E:/datasets/SynthText/test/images" -b "E:/datasets/SynthText/bg_images_1" -ogt "E:/datasets/SynthText/test/" -mat
+# synth_text.py -n 10 -f ./fonts/jp -o "E:/datasets/SynthText/test/images" -b "E:/datasets/SynthText/bg_images_1" -ogt "E:/datasets/SynthText/test/test.mat" -mat
 # synth_text.py -n 10 -o "E:/datasets/SynthText/test/images" -ogt "E:/datasets/SynthText/test/" -l
 # synth_text.py -n 1000 -cn 12 -c ./characters/japanese_kana.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
 
@@ -68,9 +68,11 @@ def image_generator():
     files= os.listdir(bg_path)
     y_margin, total = 30, args.result_num
     #imnames, wordBB, charBB, txt = [], np.zeros(total).astype(object), np.zeros(total).astype(object), []
-    imnames, wordBB, charBB, txt = [], [], [], []
+    imnames, wordBB, charBB, txt, font_list = [], [], [], [], []
 
-    font_list = ['YuGothM.ttc', 'BIZ-UDGothicR.ttc', 'meiryo.ttc', 'UDDigiKyokashoN-R.ttc', 'YuGothL.ttc', 'FZSTK.TTF', 'yumin.ttf', 'msgothic.ttc', 'msmincho.ttc', 'UDDigiKyokashoN-B.ttc']
+    for file_name in os.listdir(args.fonts_folder):
+        font_list.append(os.path.join(args.fonts_folder, file_name))
+
     for file_index, file_name in enumerate(files):
 
         if os.path.splitext(file_name)[1].lower() in ('.jpg', '.jpeg'):
@@ -87,7 +89,7 @@ def image_generator():
             num_text = num_text_list[index]
             if num_text <= 0:
                 continue
-            size = np.random.randint(24, 50, size=num_text)
+            size = np.random.randint(30, 80, size=num_text)
 
             # 减少文本超越图片大小的概率，缩小取得位置的起始点
             pos_x = np.random.randint(bk_np.shape[1] * 0.7, size=num_text)
@@ -98,7 +100,9 @@ def image_generator():
             for i in range(num_text):
 
                 wh = np.asarray((bg_img.width, bg_img.height))
-                fnt = ImageFont.truetype(font_list[np.random.randint(0, 10)], size[i])
+
+                fnt_path = font_list[np.random.randint(0, len(font_list))]
+                fnt = ImageFont.truetype(fnt_path, size[i])
                 text = word_list[word_index]
 
                 #print(bk_np.shape, tuple(np.flip(pos_xy[i])))
@@ -170,11 +174,10 @@ def one_line_images():
     output_path = args.output_images_folder
     images_folder = os.path.split(output_path)[1]
     total = args.result_num
-    fonts_path = args.fonts_folder
     
     font_list, gt_text = [], []
-    for file_name in os.listdir(fonts_path):
-        font_list.append(os.path.join(fonts_path, file_name))
+    for file_name in os.listdir(args.fonts_folder):
+        font_list.append(os.path.join(args.fonts_folder, file_name))
 
     for index in range(total):
         bg_color = np.random.randint(0, 255)
