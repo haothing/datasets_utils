@@ -13,6 +13,7 @@ import scipy.io
 # synth_text.py -n 2 -f ./fonts/jp -o "/home/repo/datasets/SynthText/test/images" -b "./bg_images" -ogt "/home/repo/datasets/SynthText/test/test.mat" -mat
 # synth_text.py -n 10 -o "E:/datasets/SynthText/test/images" -ogt "E:/datasets/SynthText/test/" -l
 # synth_text.py -n 1000 -cn 12 -c ./characters/japanese_kana.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
+# synth_text.py -n 100000 -f ./fonts/jp -o "/home/repo/datasets/SynthText/100k_big_img/images" -b "./bg_images" -ogt "/home/repo/datasets/SynthText/100k_big_img/gt.mat" -mat
 
 parser = argparse.ArgumentParser(description='Text Label Image Generator')
 parser.add_argument('--background_folder', '-b', default='./bg_images', type=str, help='images folder as background')
@@ -150,7 +151,8 @@ def image_generator():
             txt.append(np.array(txt_item))
             imnames.append(np.array([os.path.join(images_folder, new_file_name)]))
 
-        print('file_name:{}, generate to {:d} files.'.format(file_name, index + 1))
+            print('\ruse background file {} to generate {:d}/{} files.'.format(file_name, index + 1, total), end='')
+        print()
 
     return imnames, wordBB, charBB, txt
 
