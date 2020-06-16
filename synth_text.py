@@ -10,6 +10,7 @@ import scipy.io
 # command sample
 # synth_text.py -n 200 -b "E:/datasets/SynthText/bg_images" -o "E:/datasets/SynthText/SynthText_Gen/SynthText_self" -ogt "E:/datasets/SynthText/SynthText_Gen" -mat 
 # synth_text.py -n 10 -f ./fonts/jp -o "E:/datasets/SynthText/test/images" -b "E:/datasets/SynthText/bg_images_1" -ogt "E:/datasets/SynthText/test/test.mat" -mat
+# synth_text.py -n 2 -f ./fonts/jp -o "/home/repo/datasets/SynthText/test/images" -b "./bg_images" -ogt "/home/repo/datasets/SynthText/test/test.mat" -mat
 # synth_text.py -n 10 -o "E:/datasets/SynthText/test/images" -ogt "E:/datasets/SynthText/test/" -l
 # synth_text.py -n 1000 -cn 12 -c ./characters/japanese_kana.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
 
@@ -44,7 +45,7 @@ def text_generator(result_total=10):
     num_text_list[num_text_list <= 0] = 1
     
     # 随机得到日语短句
-    conn = sqlite3.connect("F:/repositories/datasets/JapaneseWordNet/wnjpn.db")
+    conn = sqlite3.connect("./wnjpn.db")
     cur = conn.execute("select * from word where lang = 'jpn' ORDER BY RANDOM() LIMIT " + str(np.sum(num_text_list)) + ";")
     word_list = [record[2] for record in cur.fetchall()]
 
