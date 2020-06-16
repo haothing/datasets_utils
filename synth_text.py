@@ -50,6 +50,9 @@ def text_generator(result_total=10):
     cur = conn.execute("select * from word where lang = 'jpn' ORDER BY RANDOM() LIMIT " + str(np.sum(num_text_list)) + ";")
     word_list = [record[2] for record in cur.fetchall()]
 
+    while len(word_list) != np.sum(num_text_list):
+        word_list += word_list[:np.sum(num_text_list) - len(word_list)]
+
     mark_num = np.random.randint(0, 5, size=np.sum(num_text_list))
     mark = '123456789012345678901234567890-^\@[]:;,./\!"#$%&\'()=~|{`+*}_?><１２３４５６７８９０１２３４５６７８９０１２３４５６７８９０ー＾￥「＠」：；、。・￥！”＃＄％＆’（）＝～｜｛‘＋｝＊＿？＞＜'
     tail = [''.join([mark[np.random.randint(len(mark))] for add_c in range(mark_num[i])]) for i in range(len(mark_num))]

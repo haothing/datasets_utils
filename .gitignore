@@ -1,3 +1,4 @@
 *.ipynb
 .vscode/
 wnjpn.db
+*.pyc
