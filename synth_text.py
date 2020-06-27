@@ -11,9 +11,14 @@ import scipy.io
 # synth_text.py -n 200 -b "E:/datasets/SynthText/bg_images" -o "E:/datasets/SynthText/SynthText_Gen/SynthText_self" -ogt "E:/datasets/SynthText/SynthText_Gen" -mat 
 # synth_text.py -n 10 -f ./fonts/jp -o "E:/datasets/SynthText/test/images" -b "E:/datasets/SynthText/bg_images_1" -ogt "E:/datasets/SynthText/test/test.mat" -mat
 # synth_text.py -n 2 -f ./fonts/jp -o "/home/repo/datasets/SynthText/test/images" -b "./bg_images" -ogt "/home/repo/datasets/SynthText/test/test.mat" -mat
-# synth_text.py -n 10 -o "E:/datasets/SynthText/test/images" -c ./characters/japanese_char.txt -f ./fonts/jp -ogt "E:/datasets/SynthText/test/test_gt.txt" -l
+# synth_text.py -n 100 -cn 12 -o "E:/datasets/SynthText/test1/images" -c F:\repositories\workspaces\format_doc_image\crnn\lib\config\jp_.txt -f ./fonts/jp_test -ogt "E:/datasets/SynthText/test1/test1_gt.txt" -l
 # synth_text.py -n 1000 -cn 12 -c ./characters/japanese_kana.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
+# synth_text.py -n 10 -cn 12 -c ./characters/jp_.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
 # synth_text.py -n 100000 -f ./fonts/jp -o "/home/repo/datasets/SynthText/100k_big_img/images" -b "./bg_images" -ogt "/home/repo/datasets/SynthText/100k_big_img/gt.mat" -mat
+
+
+# synth_text.py -n 2000 -cn 15 -o "E:/datasets/SynthText/ja_char/test_images" -c F:\repositories\workspaces\format_doc_image\crnn\lib\config\japanese_char.txt -f ./fonts/jp -ogt "E:/datasets/SynthText/ja_char/test_ground_true.txt" -l
+# synth_text.py -n 100000 -cn 15 -o "E:/datasets/SynthText/ja_char/images" -c F:\repositories\workspaces\format_doc_image\crnn\lib\config\japanese_char.txt -f ./fonts/jp -ogt "E:/datasets/SynthText/ja_char/ground_true.txt" -l
 
 parser = argparse.ArgumentParser(description='Text Label Image Generator')
 parser.add_argument('--background_folder', '-b', default='./bg_images', type=str, help='images folder as background')
@@ -185,7 +190,7 @@ def one_line_images():
     for file_name in os.listdir(args.fonts_folder):
         font_list.append(os.path.join(args.fonts_folder, file_name))
 
-    indent = 3
+    indent = 6
     for index in range(total):
         bg_color = np.random.randint(0, 255)
         text_color = bg_color + 127 - 255 if bg_color + 127 > 255 else bg_color + 127
@@ -194,7 +199,7 @@ def one_line_images():
         img = Image.fromarray(img, mode='L')
 
         fnt_path = font_list[np.random.randint(0, len(font_list))]
-        fnt = ImageFont.truetype(fnt_path, int(args.height - indent))
+        fnt = ImageFont.truetype(fnt_path, int(args.height - indent * 2))
         text = get_text(args.characters_num)
 
         draw = ImageDraw.Draw(img)
