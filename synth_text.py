@@ -9,8 +9,9 @@ import scipy.io
 
 # command sample
 # synth_text.py -n 200 -b "E:/datasets/SynthText/bg_images" -o "E:/datasets/SynthText/SynthText_Gen/SynthText_self" -ogt "E:/datasets/SynthText/SynthText_Gen" -mat 
-# synth_text.py -n 10 -f ./fonts/jp -o "E:/datasets/SynthText/test/images" -b "E:/datasets/SynthText/bg_images_1" -ogt "E:/datasets/SynthText/test/test.mat" -mat
 # synth_text.py -n 2 -f ./fonts/jp -o "/home/repo/datasets/SynthText/test/images" -b "./bg_images" -ogt "/home/repo/datasets/SynthText/test/test.mat" -mat
+# synth_text.py -n 10 -f ./fonts/jp -o "E:/datasets/SynthText/test/images" -b "E:/datasets/SynthText/bg_images_1" -ogt "E:/datasets/SynthText/test/test.mat" -mat
+
 # synth_text.py -n 100 -cn 12 -o "E:/datasets/SynthText/test1/images" -c F:\repositories\workspaces\format_doc_image\crnn\lib\config\jp_.txt -f ./fonts/jp_test -ogt "E:/datasets/SynthText/test1/test1_gt.txt" -l
 # synth_text.py -n 1000 -cn 12 -c ./characters/japanese_kana.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
 # synth_text.py -n 10 -cn 12 -c ./characters/jp_.txt -f ./fonts/jp -o "E:/datasets/SynthText/ja_kana/images" -ogt "E:/datasets/SynthText/ja_kana/ground_true.txt" -l
@@ -190,8 +191,8 @@ def one_line_images():
     for file_name in os.listdir(args.fonts_folder):
         font_list.append(os.path.join(args.fonts_folder, file_name))
 
-    indent = 6
     for index in range(total):
+        indent = np.random.randint(2, 8)
         bg_color = np.random.randint(0, 255)
         text_color = bg_color + 127 - 255 if bg_color + 127 > 255 else bg_color + 127
         
