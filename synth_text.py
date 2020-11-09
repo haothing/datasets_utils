@@ -2,6 +2,7 @@ import os
 import sys, sqlite3
 import copy
 import argparse
+import cv2
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -31,6 +32,7 @@ parser.add_argument('--mat_ground_true', '-mat', default=False, action='store_tr
 parser.add_argument('--one_line', '-l', default=False, action='store_true', help='generate one line text images')
 parser.add_argument('--fonts_folder', '-f', default='./fonts/jp', type=str, help='folder of fonts that to draw text')
 parser.add_argument('--characters_file', '-c', default='./characters/japanese_char.txt', type=str, help='origin characters to make image files')
+parser.add_argument('--dilation', '-d', default=0, type=int, help='dilation the text')
 
 parser.add_argument('--height', default=32, type=int, help='number of result images height')
 parser.add_argument('--width', default=280, type=int, help='number of result images width')
@@ -187,16 +189,18 @@ def one_line_images():
     images_folder = os.path.split(output_path)[1]
     total = args.result_num
     
+    kernel = np.ones((3, 3), np.uint8)
     font_list, gt_text = [], []
     for file_name in os.listdir(args.fonts_folder):
         font_list.append(os.path.join(args.fonts_folder, file_name))
 
     for index in range(total):
         indent = np.random.randint(2, 8)
-        bg_color = np.random.randint(0, 255)
-        text_color = bg_color + 127 - 255 if bg_color + 127 > 255 else bg_color + 127
+
+        #bg_color = np.random.randint(200, 256)
+        #text_color = np.random.randint(0, 50)
         
-        img = np.full((args.height, args.width), bg_color, dtype=np.uint8)
+        img = np.full((args.height, args.width), 0, dtype=np.uint8)
         img = Image.fromarray(img, mode='L')
 
         fnt_path = font_list[np.random.randint(0, len(font_list))]
@@ -207,11 +211,25 @@ def one_line_images():
         draw_w = draw.textsize(text, font=fnt)[0] + indent
         if draw_w > args.width:
             text = text[:int(args.width / draw_w * len(text))]
-        draw.text((indent, indent), text, font=fnt, fill=text_color)
+        draw.text((indent, indent), text, font=fnt, fill=255)
+
+        bg_color = np.random.randint(0, 255)
+        text_color = np.random.randint(0, 255)
+        if abs(text_color - bg_color) < 60:
+            text_color = bg_color + 60
+        if text_color > 255:
+            text_color = bg_color - 60
+
+        if args.dilation > 0:
+            dilation = cv2.dilate(np.array(img), kernel, iterations=args.dilation)
+            _, img = cv2.threshold(dilation, 50, 255, cv2.THRESH_BINARY)
+        else:
+            img = np.array(img)
+        #img = np.where(img == 0, img + bg_color, text_color)
 
         #img_path = os.path.join(output_path, os.path.basename(fnt_path) + '_' + str(index) + '.jpg')
         img_path = os.path.join(output_path, str(index) + '.jpg')
-        img.save(img_path)
+        Image.fromarray(img).save(img_path)
         gt_text.append(os.path.join(images_folder, str(index) + '.jpg') + ' ' + text)
 
         print('\rgenerated files {:d}/{:d}'.format(index + 1, total), end='')
